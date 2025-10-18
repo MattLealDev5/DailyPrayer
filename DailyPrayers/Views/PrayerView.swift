@@ -25,8 +25,6 @@ struct PrayerView: View {
             return
         }
         let url = URL(fileURLWithPath: path)
-        print(path)
-        print(url)
         do {
             musicAudio = try AVAudioPlayer(contentsOf: url)
             musicAudio?.play()
@@ -36,43 +34,54 @@ struct PrayerView: View {
     }
 
     var body: some View {
-        ZStack {
-            Circle()
-                .frame(width: 200)
-                .foregroundStyle(.pink.gradient)
-                .rotationEffect(.degrees(-90))
-                .blur(radius: 15)
-            Circle()
-                .trim(from: 0.0, to: CGFloat(timeRemaining)/60.0)
-                .stroke(style: StrokeStyle(lineWidth: 12.0,
-                    lineCap: .round, lineJoin: .round))
-                .frame(width: 200)
-                .rotationEffect(.degrees(-90))
-                .foregroundStyle(.pink.gradient)
-                .overlay() {
-                    Text("\(timeRemaining)")
-                        .font(.title)
-                        .foregroundStyle(.white)
-                }
-                
-                
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .overlay(alignment: .bottom) {
+        VStack(spacing: 80) {
+            Spacer()
+            
+            // Circle Timer
+            ZStack {
+                Circle()
+                    .frame(width: 200)
+                    .foregroundStyle(.pink.gradient)
+                    .rotationEffect(.degrees(-90))
+                    .blur(radius: 15)
+                Circle()
+                    .trim(from: 0.0, to: CGFloat(timeRemaining)/60.0)
+                    .stroke(style: StrokeStyle(lineWidth: 12.0,
+                                               lineCap: .round, lineJoin: .round))
+                    .frame(width: 200)
+                    .rotationEffect(.degrees(-90))
+                    .foregroundStyle(.pink.gradient)
+                    .overlay() {
+                        Text("\(timeRemaining)")
+                            .font(.title)
+                            .foregroundStyle(.white)
+                    }
+            }
+            
+            // Verse and text
             VStack(spacing: 10.0) {
                 Text(verse)
                     .font(.system(size: 24, weight: .semibold))
                 Text(verseText)
                     .font(.system(size: 22, weight: .semibold))
             }
+                
+                
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay(alignment: .bottom) {
+//            VStack(spacing: 10.0) {
+//                Text(verse)
+//                    .font(.system(size: 24, weight: .semibold))
+//                Text(verseText)
+//                    .font(.system(size: 22, weight: .semibold))
+//            }
         }.padding()
         
         .onAppear {
-            print("Playa da music!")
             playMusic()
         }
         .onReceive(timer) { _ in
-//            print("\(timeRemaining)")
             if timeRemaining > 0 {
                 timeRemaining -= 1
             }
