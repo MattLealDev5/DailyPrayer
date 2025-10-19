@@ -1,5 +1,6 @@
 # My custom gitignores
 **/Environment.swift
+**/CLAUDE.md
 .mcp.json
 
 # Xcode
