@@ -11,6 +11,8 @@ internal import Combine
 import AVFoundation
 
 struct PrayerView: View {
+    let verseData: Verse
+    
     @State var timeRemaining = 60
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -60,9 +62,9 @@ struct PrayerView: View {
             
             // Verse and text
             VStack(spacing: 10.0) {
-                Text(verse)
+                Text(verseData.id)
                     .font(.system(size: 24, weight: .semibold))
-                Text(verseText)
+                Text(verseData.text)
                     .font(.system(size: 22, weight: .semibold))
             }
                 
@@ -90,8 +92,10 @@ struct PrayerView: View {
             }
         }
     }
+    
+    
 }
 
 #Preview {
-    PrayerView()
+    PrayerView(verseData: Verse.mocked)
 }

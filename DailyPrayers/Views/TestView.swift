@@ -33,7 +33,7 @@ struct TestView: View {
         self.done = false
         
         guard let url = URL(string: testURL) else {
-            print("Fuck off")
+            print("Bad URL")
             return
         }
         
@@ -43,9 +43,9 @@ struct TestView: View {
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data else { print("Fuck off 2"); return }
+            guard let data = data else { print("Bad URLSession"); return }
             do {
-                guard let statusCode = (response as? HTTPURLResponse)?.statusCode else { print("Fuck off 3"); return }
+                guard let statusCode = (response as? HTTPURLResponse)?.statusCode else { print("Bad Status Code"); return }
                 if (statusCode == 200) {
                     let finalData = try JSONDecoder().decode(StarWarsTest.self, from: data)
                     self.planetName = finalData.name
