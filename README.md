@@ -11,6 +11,7 @@ DailyPrayer help you start your day calm and fresh for a minute with a new bible
 ## Features
 
 - Screen that displays a circular timer with a bible verse.
+- More coming soon
 
 ## Technical Stack
 
