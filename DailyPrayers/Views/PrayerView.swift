@@ -15,9 +15,6 @@ struct PrayerView: View {
     
     @State var timeRemaining = 60
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-    
-    let verse = "6. Philippians 4:6-7 (NIV)"
-    let verseText = "Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus."
 
     @State private var musicAudio: AVAudioPlayer?
 
@@ -92,7 +89,7 @@ struct PrayerView: View {
         }.padding()
         
         .onAppear {
-            playMusic() // Take off if you hear that confounded crackling
+//            playMusic() // Take off if you hear that confounded crackling
         }
         .onReceive(timer) { _ in
             if timeRemaining > 0 {

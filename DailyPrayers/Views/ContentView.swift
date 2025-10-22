@@ -11,38 +11,52 @@ import SwiftData
 struct ContentView: View {
 //    @Environment(\.modelContext) private var modelContext
 //    @Query private var items: [Item]
+    @State private var verse: Verse = Verse.mocked
+    @State private var verseFetched = false
 
     var body: some View {
-        PrayerView(verseData: Verse.mocked)
+        ZStack {
+            if verseFetched {
+                PrayerView(verseData: verse)
+            } else {
+                Text("Fetching verse...")
+            }
+        }
+        .onAppear(perform: {
+            Task {
+                await fetchVerse()
+            }
+        })
     }
     
-//    private func fetchVerse() async {
-//        // URL for the API endpoint
-//        // 👋👋👋 Make sure to replace {YOUR_API_KEY} in the URL with your actual NPS API Key
-//        let url = URL(string: "https://developer.nps.gov/api/v1/parks?stateCode=ca&api_key=Bey2ZExGkPUGcqwUmdS2Tas0vdV9FSn1uObcTjxh")!
-//        do {
-//
-//            // Perform an asynchronous data request
-//            let (data, _) = try await URLSession.shared.data(from: url)
-//
-//            // Decode json data into ParksResponse type
-//            let parksResponse = try JSONDecoder().decode(ParksResponse.self, from: data)
-//
-//            // Get the array of parks from the response
-//            let parks = parksResponse.data
-//
-//            // Print the full name of each park in the array
-//            for park in parks {
-//                print(park.fullName)
-//            }
-//
-//            // Set the parks state property
-//            self.parks = parks
-//
-//        } catch {
-//            print(error.localizedDescription)
-//        }
-//    }
+    private func fetchVerse() async {
+        // URL for the API endpoint
+        // 👋👋👋 Make sure to replace {YOUR_API_KEY} in the URL with your actual NPS API Key
+        let url = URL(string: "https://bible-api.com/leviticus%2011:12")!
+        do {
+
+            // Perform an asynchronous data request
+            let (data, _) = try await URLSession.shared.data(from: url)
+
+            // Decode json data into ParksResponse type
+            let versesResponse = try JSONDecoder().decode(VersesResponse.self, from: data)
+
+            // Get the array of parks from the response
+            let verses = versesResponse.verses
+
+            // Print the full name of each park in the array
+            for verse in verses {
+                print(verse.id)
+            }
+
+            // Set the parks state property
+            self.verse = verses[0]
+            self.verseFetched = true
+
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
 }
 
 #Preview {
