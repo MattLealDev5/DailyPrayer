@@ -22,13 +22,24 @@ struct PrayerView: View {
     @State private var musicAudio: AVAudioPlayer?
 
     func playMusic() {
+        // Configure audio session first
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Failed to set up audio session: \(error)")
+            return
+        }
+        
         guard let path = Bundle.main.path(forResource: "music_01", ofType: "mp3") else {
             print("Music file not found")
             return
         }
+        
         let url = URL(fileURLWithPath: path)
         do {
             musicAudio = try AVAudioPlayer(contentsOf: url)
+            musicAudio?.prepareToPlay() // Pre-buffer the audio
             musicAudio?.play()
         } catch {
             print("Error playing music: \(error)")
@@ -81,7 +92,7 @@ struct PrayerView: View {
         }.padding()
         
         .onAppear {
-            playMusic()
+            playMusic() // Take off if you hear that confounded crackling
         }
         .onReceive(timer) { _ in
             if timeRemaining > 0 {
