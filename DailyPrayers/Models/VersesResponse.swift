@@ -11,7 +11,7 @@ struct VersesResponse: Codable {
     let verses: [Verse]
 }
 
-struct Verse: Codable, Identifiable {
+struct Verse: Codable, Identifiable, Hashable, Equatable {
     let book_id: String
     let book_name: String
     let chapter: Int
@@ -19,6 +19,10 @@ struct Verse: Codable, Identifiable {
     let text: String
 
     var id: String { "\(book_name)-\(chapter):\(verse)" }
+    
+    func hash(into hasher: inout Hasher) { // <-- Add required hash function
+        hasher.combine(id)
+    }
 }
 extension Verse {
     static var mocked: Verse {

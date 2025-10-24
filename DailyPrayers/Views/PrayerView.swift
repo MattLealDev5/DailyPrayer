@@ -15,6 +15,9 @@ struct PrayerView: View {
     
     @State var timeRemaining = 60
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    @State var textSaved = false
+    @State var verseSaved = false
 
     @State private var musicAudio: AVAudioPlayer?
 
@@ -78,16 +81,6 @@ struct PrayerView: View {
                 
                 
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .overlay(alignment: .bottom) {
-//            VStack(spacing: 10.0) {
-//                Text(verse)
-//                    .font(.system(size: 24, weight: .semibold))
-//                Text(verseText)
-//                    .font(.system(size: 22, weight: .semibold))
-//            }
-        }.padding()
-        
         .onAppear {
 //            playMusic() // Take off if you hear that confounded crackling
         }
@@ -99,6 +92,29 @@ struct PrayerView: View {
                 timer.upstream.connect().cancel()
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay(alignment: .topTrailing) {
+            VStack {
+                Button("Share", systemImage: "arrowshape.turn.up.left") {
+                    UIPasteboard.general.string = "\(verseData.id)\n\(verseData.text)\nDownload our app"
+                    if let content = UIPasteboard.general.string {
+                        print(content)
+                        textSaved = true
+                    }
+                }
+                if textSaved {
+                    Text("Saved!")
+                        .padding(3)
+                        .font(.system(size: 24))
+                }
+            }
+        }
+        .overlay(alignment: .topLeading) {
+            Button("Save", systemImage: verseSaved ? "heart.fill" : "heart") {
+                verseSaved.toggle()
+            }
+        }
+        .padding()
     }
     
     

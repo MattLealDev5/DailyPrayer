@@ -15,18 +15,25 @@ struct ContentView: View {
     @State private var verseFetched = false
 
     var body: some View {
-        ZStack {
-            if verseFetched {
+        NavigationStack {
+            VStack {
+                NavigationLink(value: verse) {
+                    Circle()
+                        .padding()
+                }
+            }
+            .onAppear(perform: {
+                Task {
+                    await fetchVerse()
+                }
+            })
+            .navigationDestination(for: Verse.self) { verse in
                 PrayerView(verseData: verse)
-            } else {
-                Text("Fetching verse...")
             }
+//            .navigationDestination(for: Verse.self) { verse in
+//                PrayerListView()
+//            }
         }
-        .onAppear(perform: {
-            Task {
-                await fetchVerse()
-            }
-        })
     }
     
     private func fetchVerse() async {
