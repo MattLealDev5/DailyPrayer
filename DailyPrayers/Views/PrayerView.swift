@@ -102,6 +102,12 @@ struct PrayerView: View {
                 
         }
         .onAppear {
+            for item in items {
+                if item.verse.id == verseData.id {
+                    verseSaved = true
+                    return
+                }
+            }
 //            playMusic() // Take off if you hear that confounded crackling
         }
         .onReceive(timer) { _ in
