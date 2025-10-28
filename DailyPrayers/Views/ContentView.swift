@@ -17,9 +17,15 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                NavigationLink(value: verse) {
-                    Circle()
-                        .padding()
+                if verseFetched {
+                    NavigationLink("Go to thing") {
+                        PrayerView(verseData: verse)
+                    }
+                } else {
+                    Text("waiting...")
+                }
+                NavigationLink("Go to verses") {
+                    PrayerListView()
                 }
             }
             .onAppear(perform: {
@@ -27,12 +33,32 @@ struct ContentView: View {
                     await fetchVerse()
                 }
             })
-            .navigationDestination(for: Verse.self) { verse in
-                PrayerView(verseData: verse)
-            }
-//            .navigationDestination(for: Verse.self) { verse in
-//                PrayerListView()
-//            }
+            
+            // Do this one later
+//            @State private var path = NavigationPath()
+//
+//              NavigationStack(path: $path) {
+//                  VStack {
+//                      Button("Go to View A") {
+//                          path.append("ViewA")
+//                      }
+//
+//                      Button("Go to View B") {
+//                          path.append("ViewB")
+//                      }
+//                  }
+//                  .navigationDestination(for: String.self) { destination in
+//                      switch destination {
+//                      case "ViewA":
+//                          ViewA()
+//                      case "ViewB":
+//                          ViewB()
+//                      default:
+//                          Text("Unknown")
+//                      }
+//                  }
+//              }
+            
         }
     }
     
@@ -68,5 +94,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-//        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Item.self, inMemory: true)
 }

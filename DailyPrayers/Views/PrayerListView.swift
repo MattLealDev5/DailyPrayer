@@ -1,18 +1,60 @@
 //
-//  PrayerListView.swift
-//  DailyPrayers
+//  ContentView.swift
+//  QuickChat
 //
-//  Created by Matthew Leal on 10/23/25.
+//  Created by Matthew Leal on 10/27/25.
 //
 
 import SwiftUI
+import SwiftData
 
 struct PrayerListView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var items: [Item]
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            ForEach(items) { item in
+                NavigationLink {
+                    Text("\(item.verse.id)\n\(item.verse.text)")
+                        .padding()
+                } label: {
+                    Text("\(item.verse.id) (\(item.timestamp, format: Date.FormatStyle(date: .numeric)))")
+                }
+            }
+            .onDelete(perform: deleteItems)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                EditButton()
+            }
+            ToolbarItem {
+                Button(action: addItem) {
+                    Label("Add Item", systemImage: "plus")
+                }
+            }
+        }
+    }
+
+    private func addItem() {
+        withAnimation {
+            let newItem = Item(timestamp: Date(), verse: Verse.mocked)
+            modelContext.insert(newItem)
+        }
+    }
+
+    private func deleteItems(offsets: IndexSet) {
+        withAnimation {
+            for index in offsets {
+                modelContext.delete(items[index])
+            }
+        }
     }
 }
 
 #Preview {
-    PrayerListView()
+    NavigationStack {
+        PrayerListView()
+            .modelContainer(for: Item.self, inMemory: true)
+    }
 }
