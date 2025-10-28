@@ -7,10 +7,14 @@
 
 import Foundation
 import SwiftUI
+import SwiftData
 internal import Combine
 import AVFoundation
 
 struct PrayerView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query private var items: [Item]
+    
     let verseData: Verse
     
     @State var timeRemaining = 60
@@ -43,6 +47,22 @@ struct PrayerView: View {
             musicAudio?.play()
         } catch {
             print("Error playing music: \(error)")
+        }
+    }
+    
+    func saveData() {
+        if verseSaved {
+            print("save")
+            let newItem = Item(timestamp: Date(), verse: verseData)
+            modelContext.insert(newItem)
+        } else {
+            print("delete")
+            for item in items {
+                if item.verse.id == verseData.id {
+                    modelContext.delete(item)
+                    return
+                }
+            }
         }
     }
 
@@ -112,6 +132,7 @@ struct PrayerView: View {
         .overlay(alignment: .topLeading) {
             Button("Save", systemImage: verseSaved ? "heart.fill" : "heart") {
                 verseSaved.toggle()
+                saveData()
             }
         }
         .padding()

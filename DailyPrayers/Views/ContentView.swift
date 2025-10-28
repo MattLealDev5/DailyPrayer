@@ -29,8 +29,10 @@ struct ContentView: View {
                 }
             }
             .onAppear(perform: {
-                Task {
-                    await fetchVerse()
+                if !verseFetched {
+                    Task {
+                        await fetchVerse()
+                    }
                 }
             })
             
@@ -63,6 +65,7 @@ struct ContentView: View {
     }
     
     private func fetchVerse() async {
+        print("fetching...")
         // URL for the API endpoint
         // 👋👋👋 Make sure to replace {YOUR_API_KEY} in the URL with your actual NPS API Key
         let url = URL(string: "https://bible-api.com/leviticus%2011:12")!
