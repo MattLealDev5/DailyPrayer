@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct VersesResponse: Codable {
+struct VersesResponse: Codable, Sendable {
     let verses: [Verse]
 }
 
-struct Verse: Codable, Identifiable, Hashable, Equatable {
+struct Verse: Codable, Identifiable, Hashable, Equatable, Sendable {
     let book_id: String
     let book_name: String
     let chapter: Int

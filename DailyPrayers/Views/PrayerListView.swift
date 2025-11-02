@@ -16,10 +16,10 @@ struct PrayerListView: View {
         List {
             ForEach(items) { item in
                 NavigationLink {
-                    Text("\(item.verse.id)\n\(item.verse.text)")
+                    Text("\(item.book_id)\n\(item.text)")
                         .padding()
                 } label: {
-                    Text("\(item.verse.id) (\(item.timestamp, format: Date.FormatStyle(date: .numeric)))")
+                    Text("\(item.book_id) (\(item.timestamp, format: Date.FormatStyle(date: .numeric)))")
                 }
             }
             .onDelete(perform: deleteItems)

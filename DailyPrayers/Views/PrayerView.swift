@@ -58,7 +58,7 @@ struct PrayerView: View {
         } else {
             print("delete")
             for item in items {
-                if item.verse.id == verseData.id {
+                if item.book_id == verseData.id {
                     modelContext.delete(item)
                     return
                 }
@@ -103,7 +103,7 @@ struct PrayerView: View {
         }
         .onAppear {
             for item in items {
-                if item.verse.id == verseData.id {
+                if item.book_id == verseData.id {
                     verseSaved = true
                     return
                 }
